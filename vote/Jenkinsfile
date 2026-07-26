@@ -1,0 +1,46 @@
+pipeline {
+
+    agent any
+    environment {
+        IMAGE_NAME= "devops119/vote"
+    }
+    stages {
+        stage ("checkout") {
+            steps {
+                git branch: "main", URL: "https://github.com/Gopidesi19/voting-app.git"
+                echo "cloned succesfully"
+            }
+        }
+        stage ("version check") {
+            steps {
+                echo "docker --version"
+            }
+        } 
+        stage ("docker image") {
+            steps {
+                sh "docker build -t ${IMAGE_NAME} ."
+                sh "docker images"
+                echo "docker images featched successfully"
+        }
+        stage ("docker login") {
+            steps {
+                withCredientials([
+                    usernamePassword (
+                        credientialsId: 'dockerhub-creds'
+                        usernameVariables: 'DOCKER_USER'
+                        usernamePassword: 'DOCKER_PASS'
+                    )
+                ])
+                {
+                 sh " echo $DOCKER_PASS | docker login -u $DOKER_USER --password-standin "
+                }
+            }
+        }
+        stage ("docker push") {
+            steps {
+                sh "docker push ${IMAGE_NAME}:latest"
+                echo "image pushed successfully"
+            }
+        }
+    }
+}
