@@ -1,6 +1,9 @@
 pipeline {
 
     agent any
+    tools {
+        sonarQube 'sonar-scaner'
+    }
     environment {
         IMAGE_NAME= "devops119/vote"
     }
@@ -11,6 +14,20 @@ pipeline {
                 echo "cloned succesfully"
             }
         }
+        stage ('sonarQube Scan') {
+            steps {
+                withSonarQubeEnv('SonarQube')
+                {
+                    sh '''
+                        sonar-scaner \
+                        -Dsonar.projectKey=vote \
+                        -Dsonar.projectName=vote \
+                        -Dsonar.sources=. \
+                        -Dsonar.python.version=3.11
+                     '''
+                    }
+             }
+         }
         stage ("version check") {
             steps {
                 echo "docker --version"
