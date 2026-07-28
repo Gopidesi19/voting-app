@@ -1,17 +1,35 @@
 pipeline {
 
     agent any
+    options {
+        timestamps()
+        ansiColor('xterm')
+         
+    }
     tools {
         sonarQube 'sonar-scaner'
     }
     environment {
-        IMAGE_NAME= "devops119/vote"
+        IMAGE_NAME= 'vote-app'
     }
     stages {
         stage ("checkout") {
             steps {
-                git branch: "main", URL: "https://github.com/Gopidesi19/voting-app.git"
+                git branch: 'main', URL: 'https://github.com/Gopidesi19/voting-app.git'
+                sh 'ls -ltr'
                 echo "cloned succesfully"
+            }
+        
+        }
+        stage ("Build") {
+            steps {
+                sh 'pip install -r requirements.txt'
+                echo "Build stage completed"
+            }
+        }
+        stage ("test") {
+            steps {
+                echo "test stage completed"
             }
         }
         stage ('sonarQube Scan') {
@@ -28,15 +46,12 @@ pipeline {
                     }
              }
          }
-        stage ("version check") {
-            steps {
-                echo "docker --version"
-            }
-        } 
         stage ("docker image") {
             steps {
-                sh "docker build -t ${IMAGE_NAME} ."
-                sh "docker images"
+                sh 'docker --version'
+                sh 'docker build -t ${IMAGE_NAME}:1.9 .'
+                sh 'docker rmi ${IMAGE_NAME}'
+                sh 'docker images'
                 echo "docker images featched successfully"
         }
         stage ("docker login") {
@@ -55,8 +70,9 @@ pipeline {
         }
         stage ("docker push") {
             steps {
-                sh "docker push ${IMAGE_NAME}:latest"
-                echo "image pushed successfully"
+                sh 'docker tag ${IMAGE_NAME}:1.9 devops119/${IMAGE_NAME}:1.9
+                sh 'docker push devops119/${IMAGE_NAME}:1.9'
+                echo "image pushed to docker Hub successfully"
             }
         }
     }
