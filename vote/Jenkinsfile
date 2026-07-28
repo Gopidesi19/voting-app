@@ -11,6 +11,7 @@ pipeline {
     }
     environment {
         IMAGE_NAME= 'vote-app'
+        REGION_NAME= 'asia-south1'
     }
     stages {
         stage ("checkout") {
@@ -53,6 +54,7 @@ pipeline {
                 sh 'docker rmi ${IMAGE_NAME}'
                 sh 'docker images'
                 echo "docker images featched successfully"
+            }
         }
         stage ("docker login") {
             steps {
@@ -73,6 +75,18 @@ pipeline {
                 sh 'docker tag ${IMAGE_NAME}:1.9 devops119/${IMAGE_NAME}:1.9
                 sh 'docker push devops119/${IMAGE_NAME}:1.9'
                 echo "image pushed to docker Hub successfully"
+            }
+        }
+        stage ("authentication with GKE") {
+            steps {
+                sh '''
+                    gcloud container cluster get-credentials voting-cluster --region {REGION_NAME}
+                '''
+            }
+        }
+        stage ("Deploy to GKE") {
+            steps {
+                sh 'kubectl apply -f k8s-specifications/vote/*'
             }
         }
     }

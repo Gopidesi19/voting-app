@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: vote-service
+  namespace: default
+spec:
+  type: cluserIP
+  selector:
+    app: vote-app
+  ports:
+    - protocol: TCP
+    - port: 80
+      targetPort: 80
