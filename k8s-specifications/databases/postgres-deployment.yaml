@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgrs-deployment
+  namespace: default
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: postgrs-app
+  template:
+    metadata:
+      labels:
+        app: postgrs-app
+    spec:
+      containers:
+        - name: postgrs-container
+          image: postgres:trixie
+          ports:
+            - containerPort: 80

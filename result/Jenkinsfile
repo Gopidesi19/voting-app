@@ -1,7 +1,15 @@
 pipeline {
     agent any
+    options {
+        timestamp()
+        ansicolor('xterm')
+    }
+    tools {
+        sonarQube 'sonar-scaner'
+    }
     environment {
-        IMAGE_NAME= 'devops119/result'
+        IMAGE_NAME= 'result-app'
+        REGION_NAME= 'asia-south1'
     }
     stages {
         stage ("check out") {
@@ -11,14 +19,34 @@ pipeline {
    
             }
         }
-        stage ("Docker version") {
+        stage ("Build") {
             steps {
-                sh 'docker --version'
+                sh 'npm ci'
+                echo "Build stage completed"
             }
         }
+        stage ("test") {
+            steps {
+                echo "test stage completed"
+            }
+        }
+        stage ('sonarQube Scan') {
+            steps {
+                withSonarQubeEnv('SonarQube')
+                {
+                    sh '''
+                        sonar-scaner \
+                        -Dsonar.projectKey=result \
+                        -Dsonar.projectName=result \
+                        -Dsonar.sources=. \
+                     '''
+                    }
+             }
+         }
          stage ("Docker build") {
             steps {
                 dir('result') {
+                    sh 'docker --version'
                     sh 'docker build -t ${IMAGE_NAME} . '
                     echo "Docker build completed"
                 }
@@ -39,10 +67,24 @@ pipeline {
                     
             }
         }
-         stage ("Docker push") {
+        stage ("Docker push") {
+           steps {
+               sh 'docker tag ${IMAGE_NAME}:1.9'
+               sh 'docker push devops119/${IMAGE_NAME}:1.9'
+           }
+        }
+         stage ("authentication with GKE") {
             steps {
-                sh 'docker push ${IMAGE_NAME}:latest'
+                sh '''
+                    gcloud container cluster get-credentials voting-cluster --region {REGION_NAME}
+                '''
             }
         }
+        stage ("Deploy to GKE") {
+            steps {
+                sh 'kubectl apply -f k8s-specifications/result/*'
+            }
+        }
+          
     }
 }
