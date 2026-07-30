@@ -35,7 +35,7 @@ pipeline {
                 withSonarQubeEnv('SonarQube')
                 {
                     sh '''
-                        sonar-scaner \
+                        sonar-scanner \
                         -Dsonar.projectKey=vote \
                         -Dsonar.projectName=vote \
                         -Dsonar.sources=. \
