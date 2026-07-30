@@ -72,7 +72,7 @@ pipeline {
         }
         stage ("docker push") {
             steps {
-                sh 'docker tag ${IMAGE_NAME}:1.9 devops119/${IMAGE_NAME}:1.9
+                sh 'docker tag ${IMAGE_NAME}:1.9 devops119/${IMAGE_NAME}:1.9'
                 sh 'docker push devops119/${IMAGE_NAME}:1.9'
                 echo "image pushed to docker Hub successfully"
             }
