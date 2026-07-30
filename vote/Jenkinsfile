@@ -6,6 +6,9 @@ pipeline {
         ansiColor('xterm')
          
     }
+    tools {
+        sonarRunnerInstallation 'sonar-scanner'
+    }
    
     environment {
         IMAGE_NAME= 'vote-app'
