@@ -16,7 +16,7 @@ pipeline {
     stages {
         stage ("checkout") {
             steps {
-                git branch: 'main', URL: 'https://github.com/Gopidesi19/voting-app.git'
+                git branch: 'main', url: 'https://github.com/Gopidesi19/voting-app.git'
                 sh 'ls -ltr'
                 echo "cloned succesfully"
             }
