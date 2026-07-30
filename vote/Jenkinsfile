@@ -6,9 +6,7 @@ pipeline {
         ansiColor('xterm')
          
     }
-    tools {
-        sonarRunner 'sonar-scanner'
-    }
+   
     environment {
         IMAGE_NAME= 'vote-app'
         REGION_NAME= 'asia-south1'
