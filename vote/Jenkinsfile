@@ -7,7 +7,7 @@ pipeline {
          
     }
     tools {
-        sonarScanner 'sonar-scaner'
+        sonarQube 'sonar-scanner'
     }
     environment {
         IMAGE_NAME= 'vote-app'
