@@ -50,7 +50,7 @@ pipeline {
         stage ("docker image") {
             steps {
                 sh 'docker --version'
-                sh 'ls -ltr"
+                sh 'ls -ltr'
                 sh 'cd vote'
                 sh 'docker build -t ${IMAGE_NAME}:1.9 .'
                 sh 'docker rmi ${IMAGE_NAME}'
