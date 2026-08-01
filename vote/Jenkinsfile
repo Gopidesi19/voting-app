@@ -52,8 +52,7 @@ pipeline {
                 sh 'docker --version'
                 sh 'ls -ltr'
                 sh 'cd vote'
-                sh 'docker build -t ${IMAGE_NAME}:1.9 .'
-                sh 'docker rmi ${IMAGE_NAME}'
+                sh 'docker build -t ${IMAGE_NAME}:1.9 vote/.'
                 sh 'docker images'
                 echo "docker images featched successfully"
             }
