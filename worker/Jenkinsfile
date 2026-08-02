@@ -63,13 +63,13 @@ pipeline {
             steps {
                 withCredentials([
                     usernamePassword (
-                        cred`entialsId: 'dockerhub-creds'
+                        credentialsId: 'dockerhub-creds'
                         usernameVariables: 'DOCKER_USER'
                         usernamePassword: 'DOCKER_PASS'
                     )
                 ])
                 {
-                 sh " echo $DOCKER_PASS | docker login -u $DOKER_USER --password-standin "
+                 sh " echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-standin "
                 }
             }
         }
@@ -83,7 +83,7 @@ pipeline {
         stage ("authentication with GKE") {
             steps {
                 sh '''
-                    gcloud container cluster get-credentials voting-cluster --region {REGION_NAME}
+                    gcloud container cluster get-credentials voting-cluster --region ${REGION_NAME}
                 '''
             }
         }
