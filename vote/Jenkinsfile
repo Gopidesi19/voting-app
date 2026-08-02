@@ -66,7 +66,7 @@ pipeline {
                     )
                 ])
                 {
-                 sh " echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-standin "
+                 sh " echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin "
                 }
             }
         }
