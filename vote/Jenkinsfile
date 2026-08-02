@@ -80,7 +80,7 @@ pipeline {
         stage ("authentication with GKE") {
             steps {
                 sh '''
-                    gcloud container cluster get-credentials voting-cluster --region {REGION_NAME}
+                    gcloud container cluster get-credentials voting-cluster --region ${REGION_NAME}
                 '''
             }
         }
