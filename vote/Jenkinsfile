@@ -49,11 +49,13 @@ pipeline {
         }
         stage ("docker image") {
             steps {
-                sh 'docker --version'
-                sh 'ls -ltr'
-                sh 'sudo docker build -t ${IMAGE_NAME}:1.9 vote/.'
-                sh 'docker images'
-                echo "docker images featched successfully"
+                dir('vote') {
+                    sh 'docker --version'
+                    sh 'ls -ltr'
+                    sh 'sudo docker build -t ${IMAGE_NAME}:1.9 .'
+                    sh 'docker images'
+                    echo "docker images featched successfully"
+                }
             }
         }
         stage ("docker login") {
@@ -80,7 +82,7 @@ pipeline {
         stage ("authentication with GKE") {
             steps {
                 sh '''
-                    gcloud container cluster get-credentials voting-cluster --region ${REGION_NAME}
+                    gcloud container clusters get-credentials voting-cluster --region ${REGION_NAME}
                 '''
             }
         }
