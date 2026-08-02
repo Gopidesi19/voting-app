@@ -64,12 +64,12 @@ pipeline {
                 withCredentials([
                     usernamePassword (
                         credentialsId: 'dockerhub-creds'
-                        usernameVariables: 'DOCKER_USER'
+                        usernameVariable: 'DOCKER_USER'
                         usernamePassword: 'DOCKER_PASS'
                     )
                 ])
                 {
-                 sh " echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-standin "
+                 sh " echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin "
                 }
             }
         }
