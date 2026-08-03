@@ -18,3 +18,36 @@ spec:
           image: devops119/worker:1.9
           ports:
             - containerPort: 8082
+          startupProbe:
+            exec:
+              command:
+                - sh
+                - -c
+                - ps -ef | grep Worker.dll | grep -v grep
+            periodSeconds: 5
+            failureThreshold: 30
+          livenessProbe:
+            exec:
+              command:
+                - sh
+                - -c
+                - ps -ef | grep Worker.dll | grep -v grep
+            periodSeconds: 10
+            failureThreshold: 3
+          readinessProbe:
+            exec:
+              command:
+                - sh
+                - -c
+                - ps -ef | grep Worker.dll | grep -v grep
+            periodSeconds: 5
+            failureThreshold: 3
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "256Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+            
+
