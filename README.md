@@ -19,7 +19,6 @@ flowchart TD
     E --> F[Result Application]
     F --> G[User Views Results]
 ```
-<img width="860" height="800" alt="image" src="https://github.com/user-attachments/assets/cebddb51-6d3b-4c79-ab6a-0229308f0006" />
 
 ### Application Components
 
